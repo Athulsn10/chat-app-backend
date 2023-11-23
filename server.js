@@ -21,7 +21,7 @@ app.get('/api/chat/:id',(req,res)=>{
 })
 
 app.get('/aoi/chat/:id',(req,res)=>{
-    console.log(req.params.id);
+    console.log("id= "+ req.params.id);
 })
 
 const PORT = process.env.PORT || 5000
