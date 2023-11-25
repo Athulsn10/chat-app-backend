@@ -3,6 +3,7 @@ const User = require('../models/userModel');
 const { response } = require('express');
 const generateToken = require('../config/generateToken')
 
+// user registration
 const registerUser = asyncHandler(async (req,res)=>{
     const {name,email,password,pic} = req.body;
     if(!name || !email || !password){
@@ -33,7 +34,7 @@ const registerUser = asyncHandler(async (req,res)=>{
         throw new Error("failed to create user")
     }
 });
-
+// user authentication
 const authUser =asyncHandler(async (req,res)=>{
     const {email, password} = req.body;
     const user = await User.findOne({email});
@@ -50,5 +51,21 @@ const authUser =asyncHandler(async (req,res)=>{
         throw new Error("invalid credentials")
     }
 })
+// get user
+const allUsers = asyncHandler(async(req,res)=>{
+    const keyword = req.query.search ? {
+        $or:[ 
+            // 
+            {name:{$regex: req.query.search, $options:"i"}},
+            {email:{ $regex : req.query.search, $options:"i"}}
+        ]
+    }:{ 
+        // else part
+    };
+    // to get all other users expect the one who searched
+    const users = await User.find(keyword).find({_id:{$ne:req.user._id}})
+    res.send(users);
+})
 
-module.exports={registerUser,authUser}
+
+module.exports={registerUser,authUser, allUsers}
