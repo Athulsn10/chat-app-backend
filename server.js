@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 const connectDB = require('./config/db')
 const userRoutes = require('./routes/userRoutes')
 const chatRoutes = require('./routes/chatRoutes')
-
+const multer = require('multer')
 
 
 const app = express();
@@ -13,6 +13,23 @@ connectDB()
 app.get('/',(req,res)=>{
     res.send('API is running succesfully')
 });
+
+// img upload
+// const storage = multer.diskStorage({
+//     destination: function(req, file, cb) {
+//       return cb(null, "./images")
+//     },
+//     filename: function (req, file, cb) {
+//       return cb(null, `${Date.now()}_${file.originalname}`)
+//     }
+//   })
+  
+//   const upload = multer({storage})
+//   app.post('/upload', upload.single('file'), (req, res) => {
+//     // console.log(req.body)
+//     console.log(req.file)
+//   })
+
 
 app.use('/api/user',userRoutes)
 app.use('/api/chat',chatRoutes)
