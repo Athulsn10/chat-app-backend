@@ -6,6 +6,7 @@ const generateToken = require('../config/generateToken')
 // user registration
 const registerUser = asyncHandler(async (req,res)=>{
     const {name,email,password,pic} = req.body;
+    console.log(pic);
     if(!name || !email || !password){
         response.status(400);
         throw new Error('please Enter All Fields')
