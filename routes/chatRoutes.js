@@ -13,7 +13,7 @@ router.route('/group').post(protect,createGroupChat);
 // rename group
 router.route('/rename').put(protect,renameGroup);
 // exit group
-router.route("./groupremove").put(protect,removeFromGroup);
+router.route("/groupremove").put(protect,removeFromGroup);
 // add to grp
 router.route('/groupadd').put(protect, addToGroup);
 

@@ -111,10 +111,10 @@ const addToGroup =asyncHandler(async(req,res)=>{
     .populate("groupAdmin","-password");
 
     if(!added){
-        res.status(400);
+        res.status(404);
         throw new Error("chat not found")
     }else{
-        res.json(updatedChat);
+        res.json(added);
     }
 })
 
@@ -127,10 +127,10 @@ const removeFromGroup = asyncHandler(async(req,res)=>{
     .populate("groupAdmin","-password");
 
     if(!removed){
-        res.status(400);
+        res.status(404);
         throw new Error("chat not found")
     }else{
-        res.json(updatedChat);
+        res.json(removed);
     }
 })
 
