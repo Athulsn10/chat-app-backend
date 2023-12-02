@@ -3,7 +3,10 @@ const dotenv = require('dotenv')
 const connectDB = require('./config/db')
 const userRoutes = require('./routes/userRoutes')
 const chatRoutes = require('./routes/chatRoutes')
-const multer = require('multer')
+// const multer = require('multer')
+const messageRoutes = require('./routes/messageRoutes');
+const { Socket } = require('socket.io');
+
 
 
 const app = express();
@@ -13,26 +16,42 @@ connectDB()
 app.get('/',(req,res)=>{
     res.send('API is running succesfully')
 });
-
-// img upload
-// const storage = multer.diskStorage({
-//     destination: function(req, file, cb) {
-//       return cb(null, "./images")
-//     },
-//     filename: function (req, file, cb) {
-//       return cb(null, `${Date.now()}_${file.originalname}`)
-//     }
-//   })
-  
-//   const upload = multer({storage})
-//   app.post('/upload', upload.single('file'), (req, res) => {
-//     // console.log(req.body)
-//     console.log(req.file)
-//   })
-
-
 app.use('/api/user',userRoutes)
 app.use('/api/chat',chatRoutes)
+app.use('/api/message',messageRoutes)
 
 const PORT = process.env.PORT || 5000
-app.listen(5000,console.log(`Server Started on port ${PORT} `))
+const server = app.listen(5000,console.log(`Server Started on port ${PORT} `))
+const io = require('socket.io')(server,{
+    pingTimeout:100000,
+    cors:{
+        origin:'http://localhost:3000'
+    }
+})
+io.on("connection",(socket)=>{
+    console.log('Socket.io connected');
+    socket.on('setup',(userData)=>{
+        socket.join(userData._id);
+        socket.emit('connected');
+        console.log(userData._id);
+    })
+
+    socket.on('join chat',(room)=>{
+        socket.join(room);
+        console.log("User joind room" + room);
+    })
+    socket.on('new message',(newMessageRecieved)=>{
+        var chat = newMessageRecieved.chat;
+
+        if(!chat.users){
+            console.log('user undefined');
+            return
+        }else{
+            chat.users.forEach((user)=>{
+                if(user._id == newMessageRecieved.sender._id) return;
+                socket.in(user._id).emit('message recieved',newMessageRecieved)
+            })
+        }
+    })
+
+})
