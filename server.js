@@ -5,12 +5,13 @@ const userRoutes = require('./routes/userRoutes')
 const chatRoutes = require('./routes/chatRoutes')
 // const multer = require('multer')
 const messageRoutes = require('./routes/messageRoutes');
-const { Socket } = require('socket.io');
+const cors = require('cors');
 
 
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 dotenv.config();
 connectDB()
 app.get('/',(req,res)=>{
@@ -25,7 +26,7 @@ const server = app.listen(5000,console.log(`Server Started on port ${PORT} `))
 const io = require('socket.io')(server,{
     pingTimeout:100000,
     cors:{
-        origin:'http://localhost:3000'
+        origin:'http://localhost:3000'||'https://chatify-brown.vercel.app/'
     }
 })
 io.on("connection",(socket)=>{
@@ -55,3 +56,5 @@ io.on("connection",(socket)=>{
     })
 
 })
+
+// deployment
