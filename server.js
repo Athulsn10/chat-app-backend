@@ -26,7 +26,7 @@ const server = app.listen(5000,console.log(`Server Started on port ${PORT} `))
 const io = require('socket.io')(server,{
     pingTimeout:100000,
     cors:{
-        origin:'http://localhost:3000'||'https://chatify-brown.vercel.app/'
+        origin:'http://localhost:3000'
     }
 })
 io.on("connection",(socket)=>{
