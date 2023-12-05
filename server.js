@@ -21,8 +21,10 @@ app.use('/api/user',userRoutes)
 app.use('/api/chat',chatRoutes)
 app.use('/api/message',messageRoutes)
 
-const PORT = process.env.PORT || 5000
-const server = app.listen(5000,console.log(`Server Started on port ${PORT} `))
+const PORT = 5000 || process.env.PORT
+const server = app.listen(PORT, () => {
+    console.log(`Server Started on port ${PORT}`)
+})
 const io = require('socket.io')(server,{
     pingTimeout:100000,
     cors:{
