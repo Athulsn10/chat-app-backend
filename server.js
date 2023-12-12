@@ -3,7 +3,6 @@ const dotenv = require('dotenv')
 const connectDB = require('./config/db')
 const userRoutes = require('./routes/userRoutes')
 const chatRoutes = require('./routes/chatRoutes')
-// const multer = require('multer')
 const messageRoutes = require('./routes/messageRoutes');
 const cors = require('cors');
 
@@ -20,6 +19,7 @@ app.get('/',(req,res)=>{
 app.use('/api/user',userRoutes)
 app.use('/api/chat',chatRoutes)
 app.use('/api/message',messageRoutes)
+
 
 const PORT = 5000 || process.env.PORT
 const server = app.listen(PORT, () => {
@@ -59,5 +59,3 @@ io.on("connection",(socket)=>{
     })
 
 })
-
-// deployment
